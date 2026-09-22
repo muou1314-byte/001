@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080615">
+<title>给你的一份特别礼物 🎁</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:#fff;background:#080615}
+canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#stars{z-index:0}#fx{z-index:8}
+.screen{position:fixed;inset:0;z-index:3;display:none;align-items:center;justify-content:center;padding:20px;overflow:auto}
+.screen.active{display:flex}.box{width:min(92vw,650px);text-align:center;padding:28px 20px;border-radius:30px;background:rgba(255,255,255,.07);
+border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(15px);box-shadow:0 30px 100px #0008}
+h1{font-size:clamp(34px,10vw,64px);margin:8px 0 12px;background:linear-gradient(90deg,#ffd7ec,#fff0a8,#dcd4ff);-webkit-background-clip:text;color:transparent}
+p{line-height:1.8;opacity:.86}.small{font-size:13px;opacity:.55;letter-spacing:2px}
+button{border:0;border-radius:999px;padding:14px 24px;font-size:16px;font-weight:700;background:linear-gradient(135deg,#ffd6e9,#fff0ae);color:#281229;box-shadow:0 10px 30px #0005;cursor:pointer}
+button:active{transform:scale(.96)}
+.gift{font-size:120px;filter:drop-shadow(0 15px 30px #0007);animation:float 2.4s ease-in-out infinite;cursor:pointer}
+@keyframes float{50%{transform:translateY(-14px) rotate(2deg)}}
+.fade{animation:fade .8s ease both}@keyframes fade{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:none}}
+.cake-wrap{height:330px;display:flex;align-items:center;justify-content:center}.cake{position:relative;width:300px;height:220px;filter:drop-shadow(0 25px 25px #0006)}
+.plate{position:absolute;bottom:4px;left:3%;width:94%;height:25px;border-radius:50%;background:linear-gradient(#fff,#aaa);box-shadow:0 4px 10px #0005}
+.layer{position:absolute;left:10%;width:80%;border-radius:18px 18px 12px 12px}.base{bottom:30px;height:85px;background:linear-gradient(#ffb9d7,#d85e91);box-shadow:inset 0 8px #ffdceb}
+.top{bottom:100px;height:35px;background:linear-gradient(#fff2f8,#ffd1e5);border-radius:50%}
+.cream{position:absolute;bottom:82px;left:10%;width:80%;height:45px}.cream i{position:absolute;width:55px;height:36px;background:#fff5fb;border-radius:50%;top:3px}
+.cream i:nth-child(1){left:4px}.cream i:nth-child(2){left:52px;top:9px}.cream i:nth-child(3){right:52px}.cream i:nth-child(4){right:3px;top:8px}
+.candles{position:absolute;bottom:128px;left:25%;width:50%;display:flex;justify-content:space-around}.candle{width:16px;height:55px;border-radius:6px;background:repeating-linear-gradient(135deg,#fff 0 7px,#ff9ec4 7px 13px);position:relative}
+.flame{position:absolute;left:50%;top:-24px;transform:translateX(-50%);width:15px;height:22px;background:radial-gradient(circle at 50% 70%,#fff 0 18%,#ffd35a 20% 50%,#ff7952 52%);border-radius:50%;filter:drop-shadow(0 0 11px #ffc35c);animation:flicker .18s infinite alternate}
+@keyframes flicker{to{transform:translateX(-50%) scale(.84);opacity:.8}}
+.album{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 3px 18px;scrollbar-width:none}.album::-webkit-scrollbar{display:none}
+.photo{min-width:78vw;max-width:430px;aspect-ratio:4/3;border-radius:22px;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;font-size:54px;overflow:hidden;
+background:linear-gradient(135deg,#4b315a,#b36b92);box-shadow:0 15px 35px #0005}.photo img{width:100%;height:100%;object-fit:cover;display:block}.caption{margin:2px 0 15px;opacity:.75}
+.envelope{font-size:100px;cursor:pointer;animation:float 2.5s infinite}.letter{background:#fff9ee;color:#4c3040;border-radius:20px;padding:24px;text-align:left;line-height:2;max-height:50vh;overflow:auto;box-shadow:0 20px 50px #0006}
+#musicBtn{position:fixed;right:15px;bottom:15px;z-index:20;width:48px;height:48px;padding:0;font-size:20px;display:none}
+.nav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:15px}
+@media(max-height:700px){.box{padding:20px}.cake-wrap{height:250px}.cake{transform:scale(.82)}.gift{font-size:90px}}
+</style>
+
+<style id="responsive-v3">
+/* Third edition: mobile-first + desktop responsive */
+*,*::before,*::after{box-sizing:border-box}
+html,body{width:100%;min-width:0;margin:0;padding:0;overflow-x:hidden}
+body{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+  overscroll-behavior-x:none;
+}
+img,video,canvas,svg{max-width:100%}
+button,a,[role="button"]{
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.screen{
+  width:100%;
+  min-height:100vh;
+  min-height:100dvh;
+  padding:
+    max(20px,env(safe-area-inset-top))
+    max(16px,env(safe-area-inset-right))
+    max(24px,env(safe-area-inset-bottom))
+    max(16px,env(safe-area-inset-left));
+}
+.letter{
+  width:min(100%,680px);
+  max-width:680px;
+  margin-inline:auto;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+button{
+  min-height:44px;
+  padding:12px 18px;
+  font-size:16px;
+  cursor:pointer;
+}
+#album{
+  overflow-x:hidden;
+}
+#album img{
+  max-width:100%;
+  height:auto;
+  object-fit:cover;
+}
+@media (max-width:700px){
+  .screen{padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right))}
+  h1{font-size:clamp(28px,8vw,42px);line-height:1.2}
+  h2{font-size:clamp(22px,6.5vw,32px);line-height:1.25}
+  p{font-size:16px;line-height:1.7}
+  .letter{
+    width:100%;
+    padding:20px 17px !important;
+    font-size:16px !important;
+    line-height:1.9 !important;
+    border-radius:18px;
+  }
+  button{
+    width:min(100%,360px);
+    margin:6px auto;
+  }
+  #toLetter,#secretBtn{display:block}
+  canvas{display:block;max-width:100vw}
+}
+@media (max-width:420px){
+  .screen{padding-left:12px;padding-right:12px}
+  .letter{padding:17px 14px !important;font-size:15px !important}
+  button{font-size:15px;padding:11px 14px}
+}
+@media (min-width:701px){
+  .screen{padding-left:32px;padding-right:32px}
+}
+@media (orientation:landscape) and (max-height:520px){
+  .screen{padding-top:14px;padding-bottom:14px}
+}
+</style>
+
+
+<style id="photo-scale-final">
+/* 相册修正版：按照片真实比例缩放，完整显示，不裁切、不撑破容器 */
+.album{
+  width:100%;
+  display:flex;
+  gap:16px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  padding:10px 4px 18px;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+.album::-webkit-scrollbar{display:none}
+.album>div{
+  flex:0 0 auto;
+  width:min(88vw,720px);
+  min-width:min(88vw,720px);
+  scroll-snap-align:center;
+}
+.photo{
+  width:100%;
+  min-width:0;
+  height:auto;
+  aspect-ratio:auto;
+  border-radius:18px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,.06);
+  box-shadow:0 15px 35px #0005;
+}
+.photo img{
+  display:block;
+  width:100% !important;
+  height:auto !important;
+  max-width:100% !important;
+  max-height:68vh !important;
+  object-fit:contain !important;
+  margin:0 !important;
+  border-radius:0 !important;
+}
+.caption{
+  margin:10px 0 15px;
+  line-height:1.6;
+  text-align:center;
+}
+@media (max-width:700px){
+  .album>div{
+    width:90vw;
+    min-width:90vw;
+  }
+  .photo img{
+    max-height:58vh !important;
+  }
+}
+@media (min-width:701px){
+  .album>div{
+    width:min(78vw,720px);
+    min-width:min(78vw,720px);
+  }
+}
+</style>
+
+</head>
+<body>
+<canvas id="stars"></canvas><canvas id="fx"></canvas>
+
+<section id="intro" class="screen active"><div class="box fade">
+<div class="small">A LITTLE SURPRISE</div><div class="gift" id="gift">🎁</div>
+<h1>芷莹，有一份礼物送给你</h1><p>准备好了吗？<br>请点击礼物盒，打开属于你的生日惊喜。</p>
+<button id="open">打开礼物 ✨</button></div></section>
+
+<section id="birthday" class="screen"><div class="box fade">
+<div class="small">TODAY IS YOUR DAY</div><h1>生日快乐，芷莹 🎂</h1>
+<p>芷莹，愿你的新一岁，有很多小确幸，也有很多值得期待的大惊喜。</p>
+<div class="cake-wrap"><div class="cake">
+<div class="candles"><div class="candle"><span class="flame"></span></div><div class="candle"><span class="flame"></span></div><div class="candle"><span class="flame"></span></div></div>
+<div class="cream"><i></i><i></i><i></i><i></i></div><div class="layer top"></div><div class="layer base"></div><div class="plate"></div></div></div>
+<p id="wishHint">闭上眼睛许个愿，然后点击下面的按钮 🕯️</p><button id="wish">吹灭蜡烛 ✨</button>
+<div class="nav"><button id="toAlbum" style="display:none">去看看我们的回忆 📸</button></div>
+</div></section>
+
+<section id="album" class="screen"><div class="box fade">
+<div class="small">SOME MEMORIES · 7 MOMENTS</div><h1>我们的回忆 📸</h1>
+<div class="album"><div><div class="photo"><img src="memory1.png" alt="回忆照片 1"></div><div class="caption">一起留下的第一段回忆 ✨</div></div><div><div class="photo"><img src="memory2.png" alt="回忆照片 2"></div><div class="caption">每一张截图，都藏着一点快乐。</div></div><div><div class="photo"><img src="memory3.png" alt="回忆照片 3"></div><div class="caption">那些一起冒险的日子 🌅</div></div><div><div class="photo"><img src="memory4.png" alt="回忆照片 4"></div><div class="caption">可爱的一瞬间，也值得被收藏。</div></div><div><div class="photo"><img src="memory5.png" alt="回忆照片 5"></div><div class="caption">风景很好，而和你一起更好。</div></div><div><div class="photo"><img src="memory6.png" alt="回忆照片 6"></div><div class="caption">还有很多故事，等着我们继续写下去。</div></div><div><div class="photo"><img src="memory7.png" alt="回忆照片 7"></div><div class="caption">愿以后也有更多这样的瞬间。 💖</div></div></div><button id="toLetter">最后，还有一封信 💌</button><button id="secretBtn">✨ 异色彩蛋</button></div></section>
+
+<section id="letter" class="screen"><div class="box fade">
+<div class="small">A LETTER FOR YOU</div><div class="envelope" id="env">💌</div><h1>给你的话</h1>
+<div id="letterText" class="letter" style="display:none">
+亲爱的芷莹：<br><br>
+生日快乐呀。🎂<br><br>
+其实想了很久，应该用什么样的话来祝福你，最后还是觉得，比起那些很华丽的话，我更想认真地告诉你——认识你、和你一起经历那些平平常常的小日子，是一件很开心的事情。<br><br>
+有时候我们一起聊天、一起抓异色、一起看风景，可能当下并没有觉得有什么特别，但回过头来看，那些看似普通的瞬间，却慢慢变成了很珍贵的回忆。<br><br>
+所以我把这些照片放进了这个小小的网页里。希望以后某一天，当你再看到它的时候，会想起我们曾经一起留下过的这些瞬间，然后嘴角也能不自觉地笑一下。✨<br><br>
+新的一岁，希望你可以继续做自己喜欢的事情，去见想见的人，去看想看的风景。<br><br>
+也希望那些曾经让你觉得辛苦的事情，都能慢慢过去；那些你偷偷期待的事情，也能够一点一点变成现实。<br><br>
+愿你以后遇见的每一天，都有值得开心的小事；愿你被温柔对待，也永远拥有让自己开心的能力。<br><br>
+当然啦，也希望以后还能一起留下更多照片，更多故事，更多值得回头看的瞬间。<br><br>
+最后，再认真地说一次：<br><br>
+<strong>芷莹，生日快乐。</strong><br>
+愿新的一岁，平安、顺利、快乐。<br>
+愿你眼里一直有光，心里一直有期待。<br>
+也愿很多年以后，我们偶尔回头看看现在，依然会觉得——<br><br>
+<strong>“那时候的我们，真的很开心。”</strong> ❤️<br><br>
+生日快乐，芷莹。<br><br>
+—— 一个真心希望你一直开心的人 💌
+</div>
+<p id="letterHint">点击信封，打开这封信。</p><button id="restart" style="display:none">再看一次 ✨</button></div></section>
+
+<button id="musicBtn">🎵</button>
+<audio id="music" src="生日快乐.mp3" preload="auto"></audio>
+
+<script>
+const screens={intro:document.getElementById('intro'),birthday:document.getElementById('birthday'),album:document.getElementById('album'),letter:document.getElementById('letter')};
+function show(name){Object.values(screens).forEach(x=>x.classList.remove('active'));screens[name].classList.add('active')}
+const stars=document.getElementById('stars'),sctx=stars.getContext('2d'),fx=document.getElementById('fx'),ctx=fx.getContext('2d');
+let W,H,dpr,pts=[];
+function size(){dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;[stars,fx].forEach(c=>{c.width=W*dpr;c.height=H*dpr;c.style.width=W+'px';c.style.height=H+'px'});sctx.setTransform(dpr,0,0,dpr,0,0);ctx.setTransform(dpr,0,0,dpr,0,0)}
+addEventListener('resize',size);size();
+let ss=Array.from({length:100},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.7,o:.25+Math.random()*.75}));
+function starloop(){sctx.clearRect(0,0,W,H);for(const s of ss){sctx.globalAlpha=s.o*(.65+.35*Math.sin(Date.now()/600+s.x*20));sctx.fillStyle='#fff';sctx.beginPath();sctx.arc(s.x*W,s.y*H,s.r,0,7);sctx.fill()}requestAnimationFrame(starloop)}starloop();
+function burst(x,y,n=260){for(let i=0;i<n;i++){let a=Math.random()*Math.PI*2,v=2+Math.random()*8;pts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-3,r:1+Math.random()*3,l:100+Math.random()*90})}}
+function loop(){ctx.clearRect(0,0,W,H);pts=pts.filter(p=>p.l>0);for(const p of pts){p.x+=p.vx;p.y+=p.vy;p.vy+=.06;p.l--;ctx.globalAlpha=Math.min(1,p.l/50);ctx.fillStyle=Math.random()<.5?'#ffd6ed':'#fff0a5';ctx.fillRect(p.x,p.y,p.r,p.r)}ctx.globalAlpha=1;requestAnimationFrame(loop)}loop();
+
+const music=document.getElementById('music'),musicBtn=document.getElementById('musicBtn');
+function playMusic(){music.play().then(()=>musicBtn.style.display='block').catch(()=>{})}
+document.getElementById('open').onclick=()=>{show('birthday');playMusic();burst(W/2,H/2,320)}
+document.getElementById('gift').onclick=()=>document.getElementById('open').click();
+document.getElementById('wish').onclick=()=>{document.querySelectorAll('.flame').forEach(x=>x.style.display='none');let r=document.querySelector('.cake').getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height*.35,500);document.getElementById('wishHint').textContent='✨ 愿芷莹的每一个愿望，都慢慢变成现实。';document.getElementById('wish').style.display='none';document.getElementById('toAlbum').style.display='inline-block'}
+document.getElementById('toAlbum').onclick=()=>show('album');
+document.getElementById('toLetter').onclick=()=>show('letter');
+document.getElementById('secretBtn').onclick=()=>{
+  burst(W/2,H/2,420);
+  const b=document.getElementById('secretBtn');
+  b.textContent='🎉 抓到异色啦！';
+  setTimeout(()=>b.textContent='✨ 异色彩蛋',1800);
+};
+document.getElementById('env').onclick=()=>{document.getElementById('letterText').style.display='block';document.getElementById('letterHint').style.display='none';document.getElementById('env').style.display='none';document.getElementById('restart').style.display='inline-block';burst(W/2,H/2,220)}
+document.getElementById('restart').onclick=()=>location.reload();
+musicBtn.onclick=()=>{if(music.paused)music.play();else music.pause();musicBtn.textContent=music.paused?'🔇':'🎵'}
+</script>
+
+<script id="responsive-helper">
+(function(){
+  function fit(){
+    document.documentElement.style.setProperty('--vw', window.innerWidth+'px');
+    document.documentElement.style.setProperty('--vh', window.innerHeight+'px');
+  }
+  fit();
+  window.addEventListener('resize',fit,{passive:true});
+  window.addEventListener('orientationchange',function(){setTimeout(fit,100)},{passive:true});
+})();
+</script>
+
+</body></html>
